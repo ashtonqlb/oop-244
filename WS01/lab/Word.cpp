@@ -35,24 +35,29 @@ namespace sdds {
 	   words[*index].count++;
 	   (*index)++;
 	}
+
 	void title(const char* value, int len) { // uses iomanip header file
 	   cout << value << endl;
 	   cout << setw(len) << left << "Word";
 	   cout << "No of  occurrence." << endl << "------------------------------------------------" << endl;
 	}
+
 	void endList() {
 	   cout << "------------------------------------------------" << endl;
 	}
+
 	void totalWordsStat(int totNoWrds, int totalOverAll, int longestWord) {
 	   cout << "Total number of words used: " << totNoWrds << endl;
 	   cout << "Total number of words overall: " << totalOverAll << endl;
 	   cout << "Longest word used had " << longestWord << " characters." << endl;
 	}
+
 	void print(const Word* w, int gotoNextLine, int len) { // uses iomanip header file
 	   cout << setw(len) << left << w->letters;        
 	   cout << setw(3) << right <<  w->count;
 	   if (gotoNextLine) cout << endl;
 	}
+
 	int findMaxLen(const Word words[], int noOfWords) {
 	   int longest = 0;
 	   int i;
@@ -62,6 +67,7 @@ namespace sdds {
 	   }
 	   return longest;
 	}
+
 	void listWords(const Word words[], int noOfWords, const char* theTitle) {
 	   int i;
 	   int maxLen = findMaxLen(words, noOfWords);
@@ -71,12 +77,14 @@ namespace sdds {
 	   }
 	   endList();
 	}
+
 	void swap(Word* p1, Word* p2) {
 	   Word w;
 	   w = *p1;
 	   *p1 = *p2;
 	   *p2 = w;
 	}
+
 	void sort(Word words[], int cnt, int sortType) {
 	   int i, j;
 	   for (i = 0; i < cnt - 1; i++) {
@@ -104,6 +112,7 @@ namespace sdds {
 	   } while (num);
 	   return total;
 	}
+
 	void wordStats(const char* filename) {
 	   FILE* fptr = fopen(filename, "r");
 	   Word words[MAX_NO_OF_WORDS] = { {"",0} };

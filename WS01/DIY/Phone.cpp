@@ -3,42 +3,56 @@
 #include <iostream>
 #include <fstream>
 #include "Phone.h"
-#include "cStrTools.h"
 
 using namespace std;
 
 namespace sdds {
 
-	void phoneDir(const char* programTitle, const char* fileName) {
+    void phoneDir(const char* programTitle, const char* fileName) {
+        ifstream infile(fileName);
 
-		char userInput;
+        const char* exitMessage = "Thank you for using Star Wars directory"; //make this dynamic later
 
-		cout << programTitle << "phone direcotry search" << endl <<
-			 "-------------------------------------------------------" << endl;
+        cout << programTitle << " phone direcotry search\n-------------------------------------------------------\n";
+        
+        //If the file is empty, throw an error
+        if (!infile) {
+            cerr << fileName << " file not found!\n" << exitMessage << endl;
+            return;
+        }
 
-		ifstream file(fileName);
+        while (true) {
+            char userInput[128];
 
-		if (!file) {
-			cerr << fileName << "file not found!" << endl << "Thank you for using " << programTitle << "directory";
-			return;
-		}
+            cout << "Enter a partial name to search (no spaces) or enter '!' to exit\n> ";
+            cin >> userInput;
 
-		do {
-			cout << "Enter a partial name to search (no spaces) or enter '!' to exit\n>";
-			cin >> userInput;
+            if (userInput[0] == '!') {
+                cout << exitMessage;
+                break;
+            }
 
-			if (userInput == '!'){
-				cout << "Thank you for using " << programTitle << "directory";
-				return;
-			}
+            // Search for the query in each line of the file
+            bool found = false;
 
-			search(userInput);
+            while (infile) {
+                char line[100];
+                infile.getline(line, 100);
+            	const char* search = strstr(line, userInput); //this only takes in 1 char, not a string (char array)
+                if (search != nullptr) {
+                    found = true;
+                }
+            }
 
-		} while (true);
-	}
+            if (!found) {
+                cout << "No matches found." << endl;
+            }
 
-	Contact search(char token) {
-		char search_string = toLower(token);
-		return {};
-	}
+            // Reset the file pointer to the beginning of the file
+            infile.clear();
+            infile.seekg(0, ios::beg);
+        }
+        infile.close();
+        return;
+    }
 }
