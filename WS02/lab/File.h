@@ -17,9 +17,9 @@ namespace sdds {
    void closeFile();
    int noOfRecords();
 
-   bool read(char*& name);
-   bool read(int& employeeNumber);
-   bool read(double& salary);
+   bool read(char* &name);
+   bool read(int &employeeNumber);
+   bool read(double &salary);
 }
 
 #endif // !SDDS_FILE_H_

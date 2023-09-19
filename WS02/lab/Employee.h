@@ -25,7 +25,7 @@ namespace sdds {
    //sorts the dynamic array of employees based on the GPA of the employees.
    void sort();
    // loads a employee structure with its values from the file
-   bool load(Employee new_employee);
+   bool load(Employee &new_employee);
    // allocates the dynamic array of employees and loads all the file
    // records into the array
    bool load();

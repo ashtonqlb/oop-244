@@ -21,12 +21,10 @@ namespace sdds
 	int noOfEmployees;
 	Employee* employees;
 
-	void sort()
-	{
+	void sort() {
 		int i, j;
 		Employee temp;
-		for (i = noOfEmployees - 1; i > 0; i--)
-		{
+		for (i = noOfEmployees - 1; i > 0; i--) {
 			for (j = 0; j < i; j++)
 			{
 				if (employees[j].m_empNo > employees[j + 1].m_empNo)
@@ -39,15 +37,12 @@ namespace sdds
 		}
 	}
 
-	bool load(Employee new_employee) {
+	bool load(Employee &new_employee) {
 		bool ok = false;
-		// return the combined success result of the three read functions. These read 
-		// functions should set the properties of the reference argument of the load function
-        // to the values read from the file.
-		char* name = nullptr;
-		int empNo = 0;
-		double salary = 0;
-		ok = read(name) && read(empNo) && read(salary);
+
+		ok = read(new_employee.m_name)
+		&& read(new_employee.m_empNo)
+		&& read(new_employee.m_salary); ;
 
 		return ok;
 	}
@@ -56,40 +51,37 @@ namespace sdds
 		bool ok = false;
         int i = 0;
 		if (openFile(DATAFILE)) {
-			noOfEmployees = noOfRecords();
+			noOfEmployees = noOfRecords(); 
 			employees = new Employee[noOfEmployees];
+
 			for (i = 0; i < noOfEmployees; i++) {
 				load(employees[i]);
 			}
-			if (i != noOfEmployees) {
+
+			if (i != noOfEmployees) 
 				cout << "Error: incorrect number of records read; the data is possibly corrupted" << endl;
-			}
-			else {
+			else 
 				ok = true;
-			}
+			
 			closeFile();
 		}
-		else {
-			cout << "Could not open data file: " << DATAFILE << endl;
-		}
+		else cout << "Could not open data file: " << DATAFILE << endl;
 		return ok;
 	}
 
-	void display(const Employee& emp) {
+	void display(const Employee &emp) {
 		ostream& os = cout;
 		os << emp.m_empNo << ": " << emp.m_name << ", " << emp.m_salary << endl;
 	}
 
-	void display()
-	{
+	void display() {
 		sort();
 		ostream& os = cout;
 		os << "Employee Salary report, sorted by employee number" << endl;
 		os << "no- Empno, Name, Salary" << endl;
 		os << "------------------------------------------------" << endl;
 
-		for (int i = 0; i < noOfEmployees; i++)
-		{
+		for (int i = 0; i < noOfEmployees; i++) {
 			os << i + 1 << "- ";
 			display(employees[i]);
 		}	

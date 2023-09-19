@@ -10,7 +10,7 @@
 // -----------------------------------------------------------
 // Name            Date            Reason
 ***********************************************************************/
-#define CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
 #include <cstdio>
 #include <cstring>
 #include "File.h"
@@ -20,14 +20,12 @@ namespace sdds
 {
 	FILE* fptr;
 
-	bool openFile(const char filename[])
-	{
+	bool openFile(const char filename[]) {
 		fptr = fopen(filename, "r");
 		return fptr != NULL;
 	}
 
-	int noOfRecords()
-	{
+	int noOfRecords() {
 		int noOfRecs = 0;
 		char ch;
 		while (fscanf(fptr, "%c", &ch) == 1)
@@ -38,31 +36,34 @@ namespace sdds
 		return noOfRecs;
 	}
 
-	void closeFile()
-	{
-		if (fptr) fclose(fptr);
+	void closeFile() { if (fptr) fclose(fptr); }
+
+
+	bool read(char* &name) {
+		name = nullptr;
+
+		char nameStr[128];
+
+		if (fscanf(fptr, "%127[^\n]\n", nameStr) == 1) { // this reads the whole line
+			name = new char[strlen(nameStr) + 1];
+
+			if (strcpy_s(name, strlen(nameStr) + 1, nameStr) == 0) {
+				return true; 
+			}
+			delete[] name;
+			name = nullptr;
+		}
+
+		return false;
 	}
 
 
-	bool read(char* &name) //TODO: Figure out why this function does not read the name properly
-	{
-	    char nameStr[128];
-	    bool ok = fscanf(fptr, "%127[^\n]\n", nameStr) == 1;
-	    if (ok) {
-	        name = new char[strlen(nameStr) + 1];
-	        strcpy(name, nameStr);
-	        name[strlen(nameStr)] = '\0';
-	    }
-	    return ok;
+	bool read(int &employeeNumber) {
+		return fscanf(fptr, "%d,", &employeeNumber) == 1;
 	}
 
-	bool read(int& employeeNumber)
-	{
-		return fscanf(fptr, "%d,", &employeeNumber);
+	bool read(double &salary) {
+		return fscanf(fptr, "%lf,", &salary) == 1;
 	}
 
-	bool read(double& salary)
-	{
-		return fscanf(fptr, "%lf,", &salary);
-	}
 }
