@@ -16,8 +16,7 @@
 #include "File.h"
 
 
-namespace sdds
-{
+namespace sdds {
 	FILE* fptr;
 
 	bool openFile(const char filename[]) {
@@ -28,10 +27,10 @@ namespace sdds
 	int noOfRecords() {
 		int noOfRecs = 0;
 		char ch;
-		while (fscanf(fptr, "%c", &ch) == 1)
-		{
+		while (fscanf(fptr, "%c", &ch) == 1) {
 			noOfRecs += (ch == '\n');
 		}
+
 		rewind(fptr);
 		return noOfRecs;
 	}
@@ -57,7 +56,6 @@ namespace sdds
 		return false;
 	}
 
-
 	bool read(int &employeeNumber) {
 		return fscanf(fptr, "%d,", &employeeNumber) == 1;
 	}
@@ -65,5 +63,4 @@ namespace sdds
 	bool read(double &salary) {
 		return fscanf(fptr, "%lf,", &salary) == 1;
 	}
-
 }

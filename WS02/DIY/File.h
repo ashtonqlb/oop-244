@@ -13,9 +13,12 @@
 #ifndef SDDS_FILE_H_
 #define SDDS_FILE_H_
 namespace sdds {
-   bool openFile(const char filename[]);
-   void closeFile();
+	bool openFile(const char filename[]);
 
+	bool read(char* &postalCode);
+	bool read(unsigned int &population);
+	int sizeOfList(); // dynamic memory that stores the size of the csv
 
+	void closeFile();
 }
 #endif // !SDDS_FILE_H_

@@ -42,10 +42,9 @@ namespace sdds
 
 		ok = read(new_employee.m_name)
 		&& read(new_employee.m_empNo)
-		&& read(new_employee.m_salary); ;
-
-		return ok;
+		&& read(new_employee.m_salary);
 	}
+
 
 	bool load() {
 		bool ok = false;

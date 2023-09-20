@@ -9,14 +9,28 @@
 // Revision History
 // -----------------------------------------------------------
 // Name            Date            Reason
-***********************************************************************/#ifndef SDDS_POPULATION_H_
+***********************************************************************/
+#ifndef SDDS_POPULATION_H_
 #define SDDS_POPULATION_H_
 
+#define DATAFILE "PCpopulations.csv"
+
 namespace sdds {
-   // returns true of the cstring starts with subString
-   bool startsWith(const char* cString, const char* subString);
 
+	struct Postcode {
+		char* m_token = nullptr;
+		unsigned int m_population = 0;
+	};
 
+	bool startsWith(const char* cString, const char* subString);
+
+	bool load(const char* filename);
+	bool load(Postcode& postcode);
+
+	void display();
+	void display(const Postcode &pc);
+
+	void deallocateMemory();
 
 }
 #endif // SDDS_POPULATION_H_
