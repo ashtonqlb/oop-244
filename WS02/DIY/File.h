@@ -17,6 +17,9 @@ namespace sdds {
 
 	bool read(char* &postalCode);
 	bool read(unsigned int &population);
+
+	void rewindFile();
+
 	int sizeOfList(); // dynamic memory that stores the size of the csv
 
 	void closeFile();

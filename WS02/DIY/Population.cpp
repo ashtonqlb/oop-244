@@ -1,118 +1,79 @@
-/***********************************************************************
-// OOP244 Workshop #2 DIY (part 2):
-//
-// File  Population.cpp
-// Version 1.0
-// Author   Fardad Soleimanloo
-// Description
-//   To completed by students
-// Revision History
-// -----------------------------------------------------------
-// Name            Date            Reason
-***********************************************************************/
-#include <iostream>
-#include <cstring>
-#include "Population.h"
-#include "File.h"
-
 #define _CRT_SECURE_NO_WARNINGS
 
+#include <iostream>
+#include <cstring>
+#include "File.h"
+#include "Population.h"
+
 namespace sdds {
+    Postcode* postcodes;
+    int noOfPostcodes;
 
-	int noOfPostcodes;
-	Postcode* postcodes;
+    bool startsWith(const char* cstring, const char* subString) {
+        return std::strstr(cstring, subString) == cstring;
+    }
 
-	bool startsWith(const char* cstring, const char* subString) {
-	  return std::strstr(cstring, subString) == cstring;
-	}
-	
-	bool load(const char* filename) {
-		bool ok = false;
-        int i = 0;
-		if (openFile(DATAFILE)) {
-			noOfPostcodes = sizeOfList();
-			postcodes = new Postcode[noOfPostcodes];
+    bool getPostalCode(char* postal_code_prefix) {
+        std::cout << "Population Report\n-----------------\nEnter postal code:\n> ";
+        std::cin >> postal_code_prefix;
 
-			for (i = 0; i < noOfPostcodes; i++) {
-				load(postcodes[i]);
-			}
+        return postal_code_prefix[0] != '!';
+    }
 
-			if (i != noOfPostcodes) {
-				std::cout << "Error: incorrect number of records read; the data is possibly corrupted" << std::endl;
-			}
+    bool load(const char* filename, const char* partial_postal_code_prefix) {
+        if (openFile(filename)) {
+            int numMatches = 0;
+            noOfPostcodes = sizeOfList();
 
-			else ok = true;
-			
-			closeFile();
-		}
+            for (int i = 0; i < noOfPostcodes; i++) {
+                char* postalCode;
+                unsigned int population;
 
-		return ok;
-	}
+                if (read(postalCode) && read(population) && startsWith(postalCode, partial_postal_code_prefix)) {
+                    numMatches++;
+                }
 
-	bool load(Postcode& postcode) {
-		bool ok = read(postcode.m_token) && read(postcode.m_population);
-		return ok;
-	}
+                delete[] postalCode;
+            }
 
-	void display() {
-	    std::cout << "Population Report\n-----------------" << std::endl;
+            postcodes = new Postcode[numMatches];
+            rewindFile();
 
-	    if (!postcodes) {
-	        if (!load(DATAFILE)) {
-	            std::cout << "Could not open data file: " << DATAFILE << std::endl;
-	            return;
-	        }
-	    }
+            int matchIndex = 0;
+            for (int i = 0; i < noOfPostcodes; i++) {
+                char* postalCode;
+                unsigned int population;
 
-	    while (true) {
-	        bool found = false;
-	        char userInput[4];
+                if (read(postalCode) && read(population) && startsWith(postalCode, partial_postal_code_prefix)) {
+                    strcpy(postcodes[matchIndex].m_token, postalCode);
+                    postcodes[matchIndex].m_population = population;
+                    matchIndex++;
+                }
 
-	        std::cout << "Enter postal code:\n> ";
-	        std::cin >> userInput;
+                delete[] postalCode;
+            }
 
-	        if (userInput[0] == '!') {
-	            break;
-	        }
+            closeFile();
+            return true;
+        }
 
-	        std::cout << "Postal Code: population" << std::endl << "-------------------------" << std::endl;
-	        unsigned int totalPopulation = 0;
-	        int displayCount = 1;
+        return false;
+    }
 
-	        if (strcmp(userInput, "all") == 0) {
-	            for (int i = 0; i < noOfPostcodes; i++) {
-	                std::cout << displayCount << "- ";
-	                display(postcodes[i]);
-	                totalPopulation += postcodes[i].m_population;
-	                displayCount++;
-	            }
-	        } else {
-	            while (!found) {
-	                for (int i = 0; i < noOfPostcodes; i++) {
-	                    if (startsWith(postcodes[i].m_token, userInput)) {
-	                        std::cout << displayCount << "- ";
-	                        display(postcodes[i]);
-	                        totalPopulation += postcodes[i].m_population;
-	                        displayCount++;
-	                    }
-	                }
-	                found = true;
-	            }
-	        }
+    void display() {
+        std::cout << "Population Report\n-----------------" << std::endl;
+        int totalPopulation = 0;
 
-	        std::cout << "-------------------------" << std::endl << "Population of the listed areas: " << totalPopulation << std::endl;
-	    }
-}	
-	void display(const Postcode& pc) {
-		std::cout << pc.m_token << ": " << pc.m_population << std::endl;
-	}
+        for (int i = 0; i < noOfPostcodes; i++) {
+            std::cout << postcodes[i].m_token << ": " << postcodes[i].m_population << std::endl;
+            totalPopulation += postcodes[i].m_population;
+        }
 
-	void deallocateMemory() {
-	    for (int i = 0; i < noOfPostcodes; i++) {
-	        delete[] postcodes[i].m_token;
-	    }
+        std::cout << "-------------------------" << std::endl << "Population of the listed areas: " << totalPopulation << std::endl;
+    }
 
-	    delete[] postcodes; 
-	    postcodes = nullptr;
-	}
+    void deallocateMemory() {
+        delete[] postcodes;
+        postcodes = nullptr;
+    }
 }

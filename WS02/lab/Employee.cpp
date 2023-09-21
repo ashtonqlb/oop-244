@@ -38,13 +38,9 @@ namespace sdds
 	}
 
 	bool load(Employee &new_employee) {
-		bool ok = false;
-
-		ok = read(new_employee.m_name)
-		&& read(new_employee.m_empNo)
-		&& read(new_employee.m_salary);
+		bool ok = read(new_employee.m_name) && read(new_employee.m_empNo) && read(new_employee.m_salary);
+		return ok;
 	}
-
 
 	bool load() {
 		bool ok = false;

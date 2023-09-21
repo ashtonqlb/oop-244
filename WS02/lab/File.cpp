@@ -43,7 +43,7 @@ namespace sdds {
 
 		char nameStr[128];
 
-		if (fscanf(fptr, "%127[^\n]\n", nameStr) == 1) { // this reads the whole line
+		if (fscanf(fptr, "%[^\n]\n)", nameStr) == 1) { // this reads the whole line
 			name = new char[strlen(nameStr) + 1];
 
 			if (strcpy_s(name, strlen(nameStr) + 1, nameStr) == 0) {
@@ -52,7 +52,6 @@ namespace sdds {
 			delete[] name;
 			name = nullptr;
 		}
-
 		return false;
 	}
 

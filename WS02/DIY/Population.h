@@ -13,8 +13,6 @@
 #ifndef SDDS_POPULATION_H_
 #define SDDS_POPULATION_H_
 
-#define DATAFILE "PCpopulations.csv"
-
 namespace sdds {
 
 	struct Postcode {
@@ -24,8 +22,8 @@ namespace sdds {
 
 	bool startsWith(const char* cString, const char* subString);
 
-	bool load(const char* filename);
-	bool load(Postcode& postcode);
+	bool load(const char* filename, const char* partial_postal_code_prefix);
+	bool getPostalCode(char* postal_code_prefix);
 
 	void display();
 	void display(const Postcode &pc);
