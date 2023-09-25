@@ -6,7 +6,11 @@
 using namespace sdds;
 
 void Train::initialize() {
-	m_name = nullptr;
+	if (m_name != nullptr) {
+			delete[] m_name;
+			m_name = nullptr;
+	}
+
 	m_passengers = 0;
 	m_departure_time = 0;
 }
@@ -15,10 +19,9 @@ bool Train::validTime(int value) const {
     if (value >= MIN_TIME && value <= MAX_TIME) {
         int minutes = value % 100;
 
-        if (minutes <= 59) return true;
+        return (minutes <= 59);
     }
-
-    return false;
+	return false;
 }
 
 
@@ -95,20 +98,20 @@ bool Train::load(int& unboarded_passengers) {
     int value;
 
     if (std::cin >> value) {
-        if (value > 0 && value <= MAX_NO_OF_PASSENGERS) {
-            m_passengers = value;
+
+        if (value > 0 && value + m_passengers < MAX_NO_OF_PASSENGERS) {
+            m_passengers += value ;
             unboarded_passengers = 0;
             return true;
         } 
 		else {
-            unboarded_passengers = value - MAX_NO_OF_PASSENGERS;
+            unboarded_passengers = (value + m_passengers) - MAX_NO_OF_PASSENGERS;
             m_passengers = MAX_NO_OF_PASSENGERS;
             return false;
         }
     } 
 	return false;
 }
-
 
 bool Train::updateDepartureTime() {
 	std::cout << "Enter new departure time:\n> ";
@@ -124,6 +127,7 @@ bool Train::updateDepartureTime() {
 }
 
 bool Train::transfer(const Train& otherTrain) {
+
     if (isInvalid() || otherTrain.isInvalid()) {
         return false;
     }
@@ -154,4 +158,3 @@ bool Train::transfer(const Train& otherTrain) {
         return false;
     }
 }
-
