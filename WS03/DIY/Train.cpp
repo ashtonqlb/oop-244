@@ -1,6 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <iostream>
+#include <cstring>
 #include "Train.h"
 
 using namespace sdds;
@@ -36,7 +37,7 @@ bool Train::validNoOfPassengers(int value) const {
 }
 
 bool Train::isInvalid() const {
-	return (m_passengers == -1 || m_departure_time == -1);
+	return (m_name == nullptr || m_name[0] == '\0' || m_passengers <= 0 || m_departure_time <= 0);
 }
 
 void Train::set(const char* name) {
@@ -85,15 +86,15 @@ const char* Train::getName() const {
 }
 
 void Train::display() const {
-	if (isInvalid()){
-		std::cout << "NAME OF THE TRAIN : "     << getName()          << std::endl
-	              << "NUMBER OF PASSENGERS  : " << noOfPassengers()   << std::endl
-                  << "DEPARTURE TIME        : " << getDepartureTime() << std::endl;
+	if (!isInvalid()){
+		std::cout << "NAME OF THE TRAIN:    "     << getName()          << std::endl
+	              << "NUMBER OF PASSENGERS: " << noOfPassengers()   << std::endl
+                  << "DEPARTURE TIME:       " << getDepartureTime() << std::endl;
 	}
-	else std::cout << "Train in Empty State!" << std::endl;
+	else std::cout << "Train in an invalid State!" << std::endl;
 }
 
-bool Train::load(int& unboarded_passengers) {
+bool Train::load(int& unboarded_passengers) { // All I have to do is rewrite this single function so that if the reference argument has a value, pass it in, else use my existing logic. That's all.
     std::cout << "Enter number of passengers boarding:\n> ";
     int value;
 
@@ -128,33 +129,28 @@ bool Train::updateDepartureTime() {
 
 bool Train::transfer(const Train& otherTrain) {
 
-    if (isInvalid() || otherTrain.isInvalid()) {
-        return false;
-    }
+	if (isInvalid() || otherTrain.isInvalid()) {
+		return false;
+	}
 
-    // Calculate the length of combined names
-    size_t combinedNameLength = strlen(m_name) + strlen(", ") + strlen(otherTrain.m_name) + 1;
-    
-    // Allocate memory for the combined name
-    char* combinedName = new char[combinedNameLength];
+	size_t combinedNameLength = strlen(m_name) + strlen(", ") + strlen(otherTrain.m_name) + 1;
 
-    // Combine the names of the two trains
-    strcpy(combinedName, m_name);
-    strcat(combinedName, ", ");
-    strcat(combinedName, otherTrain.m_name);
-	
-    // Attempt to board passengers from the other train
-    int unboardedPassengers = otherTrain.noOfPassengers();
+	char* combinedName = new char[combinedNameLength];
 
-    if (load(unboardedPassengers)) {
-        set(combinedName);
-		delete[] combinedName; 
-        return true;
-    } 
-	else {
-        // If some passengers are left behind, print a message
-        std::cout << "Train is full; " << unboardedPassengers << " passengers of " << combinedName << " could not be boarded!";
+	strcpy(combinedName, m_name);
+	strcat(combinedName, ", ");
+	strcat(combinedName, otherTrain.m_name);
+
+	int unboardedPassengers = otherTrain.noOfPassengers();
+
+	if (load(unboardedPassengers)) {
+		set(combinedName);
 		delete[] combinedName;
-        return false;
-    }
+		return true;
+	}
+
+	std::cout << "Train is full; " << unboardedPassengers << " passengers of " << combinedName << " could not be boarded!";
+	delete[] combinedName;
+	return false;
+
 }

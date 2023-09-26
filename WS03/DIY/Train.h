@@ -7,8 +7,9 @@
 
 namespace sdds {
 	class Train{
-		char* m_name;
-		int m_passengers, m_departure_time;
+		char* m_name {};
+		int m_passengers {};
+		int m_departure_time {};
 
 		public:
 			void initialize();
