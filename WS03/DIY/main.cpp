@@ -9,6 +9,7 @@
 // Revision History
 // -----------------------------------------------------------
 // Name                 Date            Reason
+//
 ***********************************************************************/
 
 #include <iostream>
@@ -19,8 +20,8 @@ using namespace sdds;
 
 void transfer(Train& to, const Train& from);
 int main() {
-	int i{};
-	int notBoarded;
+	int i {};
+	int notBoarded {};
 	Train A, B, C, D;
 	A.initialize();
 	B.initialize();

@@ -35,6 +35,7 @@ namespace sdds {
 			bool updateDepartureTime();
 
 			bool transfer(const Train& train);
+			bool transferPassengers(int& passengers_to_transfer);
 	};
 }
 

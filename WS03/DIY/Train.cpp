@@ -95,22 +95,22 @@ void Train::display() const {
 }
 
 bool Train::load(int& unboarded_passengers) { // All I have to do is rewrite this single function so that if the reference argument has a value, pass it in, else use my existing logic. That's all.
-    std::cout << "Enter number of passengers boarding:\n> ";
-    int value;
+	std::cout << "Enter number of passengers boarding:\n> ";
+	int value {};
 
-    if (std::cin >> value) {
+	if (std::cin >> value) {
 
-        if (value > 0 && value + m_passengers < MAX_NO_OF_PASSENGERS) {
-            m_passengers += value ;
-            unboarded_passengers = 0;
-            return true;
-        } 
+		if (value > 0 && value + m_passengers < MAX_NO_OF_PASSENGERS) {
+			m_passengers += value;
+			unboarded_passengers = 0;
+			return true;
+		}
 		else {
-            unboarded_passengers = (value + m_passengers) - MAX_NO_OF_PASSENGERS;
-            m_passengers = MAX_NO_OF_PASSENGERS;
-            return false;
-        }
-    } 
+			unboarded_passengers = (value + m_passengers) - MAX_NO_OF_PASSENGERS;
+			m_passengers = MAX_NO_OF_PASSENGERS;
+			return false;
+		}
+	}
 	return false;
 }
 
@@ -128,12 +128,13 @@ bool Train::updateDepartureTime() {
 }
 
 bool Train::transfer(const Train& otherTrain) {
+	int unboardedPassengers{};
 
 	if (isInvalid() || otherTrain.isInvalid()) {
 		return false;
 	}
 
-	size_t combinedNameLength = strlen(m_name) + strlen(", ") + strlen(otherTrain.m_name) + 1;
+	const size_t combinedNameLength = strlen(m_name) + strlen(", ") + strlen(otherTrain.m_name) + 1;
 
 	char* combinedName = new char[combinedNameLength];
 
@@ -141,16 +142,34 @@ bool Train::transfer(const Train& otherTrain) {
 	strcat(combinedName, ", ");
 	strcat(combinedName, otherTrain.m_name);
 
-	int unboardedPassengers = otherTrain.noOfPassengers();
+	unboardedPassengers = otherTrain.noOfPassengers();
 
-	if (load(unboardedPassengers)) {
-		set(combinedName);
-		delete[] combinedName;
+	set(combinedName);
+	delete[] combinedName;
+
+	if (transferPassengers(unboardedPassengers)) {
 		return true;
 	}
 
-	std::cout << "Train is full; " << unboardedPassengers << " passengers of " << combinedName << " could not be boarded!";
-	delete[] combinedName;
-	return false;
+	std::cout << "Train is full; " << unboardedPassengers << " passengers of " << otherTrain.m_name << " could not be boarded!" << std::endl;
+	return true;
+}
 
+bool Train::transferPassengers(int& passengers_to_transfer) {
+	const int value = passengers_to_transfer;
+
+	if (validNoOfPassengers(value)) {
+
+		if (value > 0 && value + m_passengers < MAX_NO_OF_PASSENGERS) {
+			m_passengers += value;
+			passengers_to_transfer = 0;
+			return true;
+		}
+		else {
+			passengers_to_transfer = (value + m_passengers) - MAX_NO_OF_PASSENGERS;
+			m_passengers = MAX_NO_OF_PASSENGERS;
+			return false;
+		}
+	}
+	return false;
 }
