@@ -39,8 +39,8 @@ namespace sdds {
 		delete[] m_model;
 	}
 
-	void CarInventory::printInfo() const {
-		std::cout << m_type << " " << m_brand << " " << m_model << " " << m_year << " " << " " << m_code << " " << std::setprecision(2) << m_price;
+	void CarInventory::printInfo() const { //TODO: Make this print all nicely. Right now it just needs to get the information out.
+		std::cout << m_type << " " << m_brand << " " << m_model << " " << m_year << " " << " " << m_code << " " << std::setprecision(2) << m_price << std::endl;;
 	}
 
 	CarInventory& CarInventory::setInfo(const char* type, const char* brand, const char* model, int year, int code, double price) {
@@ -69,7 +69,14 @@ namespace sdds {
 	}
 
 	int find_similar(CarInventory car[], const int num_cars) {
-		return 0;
+		for (int i = 0; i < num_cars; i++) {
+			for (int j = i+1; j < num_cars; j++) {
+				if (car[i].isSimilarTo(car[j])) {
+					return i;
+				}
+			}
+		}
+		return -1;
 	}
-}
 
+}
