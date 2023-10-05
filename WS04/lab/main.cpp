@@ -24,7 +24,7 @@ int main() {
 	CarInventory cars[num_cars] = {
 		{},
 		{"suv", "volvo", "xc90"},
-		{"Truck", "Ford", "F 150", 2021, 105, 55000},
+		{"Truck", "Ford", "F150", 2021, 105, 55000},
 		{"Sedan", "BMW", "M550i", 2022, 101, 91000},
 		{"Truck", "Tesla", "Cybertruck", 2021, 102, 65000},
 		{"Sedan", "BMW", "M550i"}
