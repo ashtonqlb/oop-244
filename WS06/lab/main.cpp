@@ -113,7 +113,6 @@ void dataEntryTest() {
     cout << "HealthCard Content:" << endl << C << endl;
 }
 
-
 HealthCard ReadCardFromFile(istream& istr) {
     HealthCard C;
     istr >> C;
