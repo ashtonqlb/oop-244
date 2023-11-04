@@ -13,6 +13,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <ctime>
+#include <cstring>
 #include "Utils.h"
 using namespace std;
 namespace sdds {
@@ -35,7 +36,7 @@ namespace sdds {
          if (year) *year = lt.tm_year + 1900;
       }
    }
-   int Utils::daysOfMon(int month, int year)const {
+   int Utils::daysOfMon(int month, int year) const {
       int days[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31, -1 };
       int mon = (month >= 1 && month <= 12 ? month : 13)-1;
       return days[mon] + int((mon == 1) * ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0));
@@ -66,8 +67,7 @@ namespace sdds {
 
            if (std::cin.fail()) {
                std::cin.clear();
-               std::cin.ignore(1000, '\n');
-               std::cout << "Invalid Integer, retry: ";
+               return -1;
            }
            else {
                success = true;

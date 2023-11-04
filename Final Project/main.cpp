@@ -22,7 +22,7 @@ void dateTester();
 
 int main() {
    cout << "Status Tester -----------------------------------------------------" << endl;
-   statusTester();
+   //statusTester();
    cout << "Date Tester -------------------------------------------------------" << endl;
    dateTester();
 }

@@ -8,7 +8,7 @@ namespace sdds {
 		char* m_description;
 		int m_code;
 	public:
-		Status(const char* description = nullptr, int code = 0);
+		Status(const char* description = "\0", int code = 0);
 		Status(const Status& other);
 		~Status();
 

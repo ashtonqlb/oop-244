@@ -2,6 +2,8 @@
 #define SDDS_DATE_H
 
 constexpr int MAX_YEAR_VALUE = 2030;
+constexpr int MAX_MONTH_VALUE = 12;
+constexpr int MIN_VALUE = 1;
 
 #include <iostream>
 

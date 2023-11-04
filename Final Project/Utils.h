@@ -13,6 +13,7 @@
 ***********************************************************************/
 #ifndef SDDS_UTILS_H
 #define SDDS_UTILS_H
+
 namespace sdds {
    const int sdds_testYear = 2023;
    const int sdds_testMon = 12;
@@ -26,7 +27,7 @@ namespace sdds {
 
       void alocpy(char*& destination, const char* source);
 
-      int get_int(const char* prompt = nullptr);
+      int get_int(const char* prompt = "\0");
       int get_int(int min, int max, const char* prompt = nullptr, const char* errMes = nullptr);
    };
    extern Utils ut;
