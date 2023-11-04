@@ -1,19 +1,31 @@
+/* ------------------------------------------------------
+No stealsies! I love Academic Integrity so much and I have as much integrity as a rock!
+
+Workshop 6 part 1
+Name: Ashton Lunken
+Student Num: 134128214
+Section: NBB
+Email: abennet@myseneca.ca
+Date: 03/11/2023
+-----------------------------------------------------------*/
+
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <iostream>
 #include <cstring>
 #include <iomanip>
+
 #include "HealthCard.h"
 
 namespace sdds {
 
     bool HealthCard::validID(const char* name, long long number, const char vCode[], const char sNumber[]) const {
-        return name != nullptr       &&
-            strlen(name) > 0         &&
-            number > HEALTH_CARD_MIN &&
-            number < HEALTH_CARD_MAX &&
-            strlen(vCode) == 2       &&
-            strlen(sNumber) == 9;
+        return (name != nullptr       &&
+                strlen(name) > 0         &&
+                number > HEALTH_CARD_MIN &&
+                number < HEALTH_CARD_MAX &&
+                strlen(vCode) == 2       &&
+                strlen(sNumber) == 9);
     }
 
     void HealthCard::setEmpty() {
@@ -25,17 +37,21 @@ namespace sdds {
     }
 
     void HealthCard::allocateAndCopy(const char* name) {
-        delete[] m_name;
-        m_name = new char[strlen(name) + 1];
-        strcpy(m_name, name);
+        if (name) {
+            delete[] m_name;
+            m_name = new char[strlen(name) + 1];
+            strcpy(m_name, name);
+        }
     }
 
     void HealthCard::extractChar(std::istream& istr, char ch) const {
-        char next_char = istr.peek();
-        if (next_char == ch) istr.ignore();
-        else {
-            istr.ignore(1000, ch);
-            istr.setstate(std::ios::failbit);
+        if (!istr.fail()) {
+            char next_char = istr.peek();
+            if (next_char == ch) istr.ignore();
+            else {
+                istr.ignore(1000, ch);
+                istr.setstate(std::ios::failbit);
+            }
         }
     }
 
@@ -65,7 +81,7 @@ namespace sdds {
     }
 
     HealthCard::HealthCard(const HealthCard& hc) {
-        if (hc) {
+        if (validID(hc.m_name, hc.m_number, hc.m_vCode, hc.m_sNumber)) {
             set(hc.m_name, hc.m_number, hc.m_vCode, hc.m_sNumber);
         }
         else {
@@ -90,14 +106,13 @@ namespace sdds {
     }
 
     HealthCard::operator bool() const {
-        return m_name != nullptr;
+        return !(m_name == nullptr);
     }
 
     std::ostream& HealthCard::print(std::ostream& ostr, bool toFile) const {
         if (*this) {
             if (toFile) {
-                ostr << m_name << ",";
-                printIDInfo(ostr);
+                ostr << m_name << "," << m_number << "-" << m_vCode << ", " << m_sNumber << std::endl; // Add newline for each record
             }
             else {
                 ostr << std::left << std::setw(50) << std::setfill('.') << m_name;
@@ -123,11 +138,12 @@ namespace sdds {
 
         istr.get(sNumber, 10, '\n');
 
-        if (!istr.fail()) {
+        if (istr) {
             set(name, number, vCode, sNumber);
-            istr.clear();
-            istr.ignore(1000, '\n');
         }
+
+        istr.clear();
+        istr.ignore(1000, '\n');
 
         return istr;
     }

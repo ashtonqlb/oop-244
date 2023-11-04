@@ -1,3 +1,14 @@
+/* ------------------------------------------------------
+No stealsies! I love Academic Integrity so much and I have as much integrity as a rock!
+
+Workshop 6 part 1
+Name: Ashton Lunken
+Student Num: 134128214
+Section: NBB
+Email: abennet@myseneca.ca
+Date: 03/11/2023
+-----------------------------------------------------------*/
+
 #ifndef SDDS_HEALTHCARD_H
 #define SDDS_HEALTHCARD_H
 

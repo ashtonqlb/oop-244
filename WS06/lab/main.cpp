@@ -19,7 +19,6 @@ HealthCard ReadCardFromFile(istream& istr);
 void dataEntryTest();
 void validationTest();
 
-
 int main() {
     int i;
     int recs = noOfRecs("HealthCardInfo.csv");
