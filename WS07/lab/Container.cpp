@@ -1,3 +1,8 @@
+// OOP244 Workshop 07 
+// Ashton Lunken 
+// ID: 134128214
+// No stealsies. This is my own work. I think.
+
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <cstring>
@@ -56,7 +61,7 @@ namespace sdds {
 
 	void Container::clear(int capacity, const char* content) {
 		if (capacity && content && strlen(content) > 0) {
-			this->~Container();
+			setEmpty();
 			new (this) Container(content, capacity);
 		}
 		else setEmpty();
@@ -79,7 +84,7 @@ namespace sdds {
 			istr.ignore(1000, '\n');
 			return istr;
 		}
-
+		std::cout << "Add to ";
 		print(std::cout);
 		std::cout << "\n> ";
 
@@ -97,7 +102,7 @@ namespace sdds {
 	}
 
 
-	std::ostream& operator<<(std::ostream& ostr, Container& C) {
+	std::ostream& operator<<(std::ostream& ostr, const Container& C) {
 		return C.print(ostr);
 	}
 

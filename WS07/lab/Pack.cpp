@@ -1,3 +1,8 @@
+// OOP244 Workshop 07 
+// Ashton Lunken 
+// Student ID: 134128214
+// No stealsies. This is my own work. I think.
+
 #include "Pack.h"
 
 namespace sdds {
@@ -34,14 +39,15 @@ namespace sdds {
 
 	void Pack::clear(int size, int unit_size, const char* content) {
 		if (unit_size > 0) {
+			m_unit_size = unit_size;
 			Container::clear(size * unit_size, content);
 		}
 		else Container::setEmpty();
 	}
 
 	std::ostream& Pack::print(std::ostream& ostr) const {
-		Container::print(ostr);
 		if (*this) {
+			Container::print(ostr);
 			ostr << ", " << no_of_units() << " in a pack of " << size();
 		}
 		return ostr;
@@ -57,23 +63,25 @@ namespace sdds {
 		int missing_units = size() - no_of_units();
 
 		if (missing_units > 0) {
+
+			std::cout << "Add to ";
 			print(std::cout);
 			std::cout << "\n> ";
+
 			int units_to_add;
 
 			while (!(istr >> units_to_add) || units_to_add < 1 || units_to_add > missing_units) {
 				istr.clear();
 				istr.ignore(1000, '\n');
-				std::cout << "Invalid number, retry: ";
 				if (units_to_add > missing_units) {
-					std::cout << "Value out of range [1<=" << units_to_add << "<=" << missing_units << "]: ";
+					std::cout << "Value out of range [1<=val<=" << missing_units << "]: ";
 				}
 			}
 
 			int added_units = *this += units_to_add;
-			std::cout << "Added" << added_units << std::endl;
+			std::cout << "Added " << added_units << std::endl;
 		} else {
-			std::cout << "Pack is full! Press <ENTER> to continue...." << std::endl;
+			std::cout << "Pack is full!, Press <ENTER> to continue...." << std::endl;
 			istr.ignore(1000, '\n');
 		}
 
