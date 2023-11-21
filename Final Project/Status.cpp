@@ -15,6 +15,9 @@ namespace sdds {
 			m_description = new char[strlen(other.m_description) + 1];
 			strcpy(m_description, other.m_description);
 		}
+		else {
+			m_description = nullptr;
+		}
 	}
 
 	Status::~Status() {

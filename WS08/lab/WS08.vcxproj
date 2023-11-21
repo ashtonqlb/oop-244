@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{67a09938-6b4e-442e-be20-c147c4f07df7}</ProjectGuid>
-    <RootNamespace>ms1</RootNamespace>
+    <ProjectGuid>{1a9109f4-d9ce-478f-9972-6a022a4146b6}</ProjectGuid>
+    <RootNamespace>WS08</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -139,18 +139,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Date.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Status.cpp" />
-    <ClCompile Include="Utils.cpp" />
+    <ClInclude Include="LblShape.h" />
+    <ClInclude Include="Line.h" />
+    <ClInclude Include="Rectangle.h" />
+    <ClInclude Include="Shape.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Date.h" />
-    <ClInclude Include="Status.h" />
-    <ClInclude Include="Utils.h" />
+    <ClCompile Include="LblShape.cpp" />
+    <ClCompile Include="Line.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Rectangle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\readme.md" />
+    <None Include="ClassDiagram.cd" />
+    <None Include="ws8data.csv" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="correct_output.txt" />

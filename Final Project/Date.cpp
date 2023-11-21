@@ -6,10 +6,9 @@
 
 namespace sdds {
 	bool Date::validate() {
-		Utils u;
 		int current_year;
 
-		u.getSystemDate(&current_year);
+		ut.getSystemDate(&current_year);
 
 		if (m_year == -1 || m_month == -1 || m_day == -1) {
 			std::cout << "Invalid date value";
@@ -28,7 +27,7 @@ namespace sdds {
 			return false;
 		}
 
-		if (m_day < MIN_VALUE || m_day > u.daysOfMon(m_month, m_year)) {
+		if (m_day < MIN_VALUE || m_day > ut.daysOfMon(m_month, m_year)) {
 			m_state = "Invalid day in date";
 			m_state = 3;
 			return false;
@@ -108,12 +107,11 @@ namespace sdds {
 	}
 
 	std::istream& Date::read(std::istream& istr) {
-		Utils u;
 		int date_value, current_year;
 
-		u.getSystemDate(&current_year);
+		ut.getSystemDate(&current_year);
 
-		date_value = u.get_int();
+		date_value = ut.get_int();
 
 		if (date_value < 10000) {
 			m_year = current_year;
@@ -140,6 +138,4 @@ namespace sdds {
 	std::istream& operator>>(std::istream& istr, Date& date) {
 		return date.read(istr);
 	}
-
 }
-

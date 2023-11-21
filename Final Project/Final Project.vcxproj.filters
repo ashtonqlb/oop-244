@@ -15,34 +15,50 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Status.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Date.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Status.h">
+    <ClInclude Include="Menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Utils.h">
+    <ClInclude Include="AidMan.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Date.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Status.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="iProduct.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\readme.md">
-      <Filter>Resource Files</Filter>
-    </None>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Status.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Date.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AidMan.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="correct_output.txt">

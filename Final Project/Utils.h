@@ -14,6 +14,8 @@
 #ifndef SDDS_UTILS_H
 #define SDDS_UTILS_H
 
+#include "Item.h"
+
 namespace sdds {
    const int sdds_testYear = 2023;
    const int sdds_testMon = 12;
@@ -29,6 +31,11 @@ namespace sdds {
 
       int get_int(const char* prompt = "\0");
       int get_int(int min, int max, const char* prompt = nullptr, const char* errMes = nullptr);
+
+      double get_double(const char* prompt = "\0");
+      double get_double(double min, double max, const char* prompt = nullptr, const char* errMes = nullptr);
+
+      char* get_cstring(const char* prompt = "\0", const char* errMes = nullptr, unsigned int len = MAX_LINEAR_DESCRIPTION_SIZE);
    };
    extern Utils ut;
 }
