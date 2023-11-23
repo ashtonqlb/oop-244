@@ -43,18 +43,11 @@ namespace sdds {
 
 	Date::Date(int year, int month, int day) : m_year(year), m_month(month), m_day(day), m_format(true) {
 		if (year == 0 && month == 0 && day == 0) {
-			//Utils u;
-			//u.getSystemDate(&year, &month, &day);
+			ut.getSystemDate(&year, &month, &day);
 
-			//m_year = year;
-			//m_month = month;
-			//m_day = day;
-			//This is the RIGHT way to do it but to get it to pass validation on Matrix I have no choice to hardcode these values. 
-			//It's a structural problem. Either use a submitter that can update every day or you'll have to accept this.
-
-			m_year = 2023;
-			m_month = 12;
-			m_day = 9;
+			m_year = year;
+			m_month = month;
+			m_day = day;
 		} 
 		else validate();
 	}
@@ -84,7 +77,7 @@ namespace sdds {
 	}
 
 	Date::operator bool() const {
-		return static_cast<bool>(m_state);
+		return state();
 	}
 
 	const Status& Date::state() const {

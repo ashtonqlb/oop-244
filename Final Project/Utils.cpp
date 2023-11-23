@@ -15,6 +15,8 @@
 #include <ctime>
 #include <cstring>
 #include "Utils.h"
+
+#include <iomanip>
 using namespace std;
 namespace sdds {
 	Utils ut;
@@ -135,7 +137,7 @@ namespace sdds {
 	                std::cout << errMes << ", retry: ";
 	            }
 	            else {
-	                std::cout << "Value out of range [" << min << "<=val<=" << max << "]: ";
+	                std::cout << "Value out of range [" << std::fixed << std::setprecision(2) << min << "<=val<=" << max << "]: ";
 	            }
 	        }
 	        else {
@@ -145,32 +147,97 @@ namespace sdds {
 		return value;
 	}
 
-	char* Utils::get_cstring(const char* prompt, const char* errMes, unsigned int len) {
-		char* value = new char[len];
-		bool success = false;
+	char* Utils::get_cstring(std::istream& input, const char* errMes, char delimiter) {
+        char* buffer = new char[INITIAL_BUFFER_SIZE];
+        int buffer_size = INITIAL_BUFFER_SIZE;
+        bool success = false;
 
-		while (!success) {
-			if (prompt != nullptr) {
-	            std::cout << prompt;
-	        }
+        while (!success) {
+            if (!input.getline(buffer, buffer_size, delimiter)) {
+                if (input.eof()) {
+                    delete[] buffer;
+                    return nullptr;
+                }
+                if (input.fail()) {
+                    input.clear();
+                    input.ignore(1000, delimiter);
 
-			std::cin >> value;
+                    if (input.gcount() == buffer_size - 1) {
+                        char* new_buffer = new char[buffer_size * 2];
+                        std::strcpy(new_buffer, buffer);
+                        delete[] buffer;
+                        buffer = new_buffer;
+                        buffer_size *= 2;
+                        continue;
+                    }
 
-			if (std::cin.fail() || std::cin.peek() != '\n') {
-	            std::cin.clear();
-	            std::cin.ignore(1000, '\n');
-				if (errMes != nullptr) {
-	                std::cout << errMes << ", retry: ";
-	            }
-				else {
-		           std::cout << "Invalid string: "; 
-	            }
-	        }
-			else {
-				success = true;
-			}
-		}
-		return value;
-	}
+                    if (errMes != nullptr) {
+                        std::cout << errMes;
+                    } else {
+                        std::cout << "Invalid string, retry\n";
+                    }
+                }
+            }
+        	else {
+                success = true;
+            }
+        }
 
-}
+        char* value = new char[std::strlen(buffer) + 1];
+        std::strcpy(value, buffer);
+        delete[] buffer;
+
+        return value;
+    };
+
+	char* Utils::get_cstring(const char* prompt, const char* errMes, char delimiter) {
+        char* buffer = new char[INITIAL_BUFFER_SIZE];
+        int buffer_size = INITIAL_BUFFER_SIZE;
+        bool success = false;
+
+        while (!success) {
+            if (prompt != nullptr) {
+                std::cout << prompt;
+            }
+
+            if (!std::cin.getline(buffer, buffer_size)) {
+                if (std::cin.eof()) {
+                    delete[] buffer;
+                    return nullptr;
+                }
+            	if (std::cin.fail()) {
+                    std::cin.clear();
+                    std::cin.ignore(1000, delimiter);
+
+                    if (std::cin.gcount() == buffer_size - 1) {
+                        char* new_buffer = new char[buffer_size * 2];
+                        std::strcpy(new_buffer, buffer);
+                        delete[] buffer;
+                        buffer = new_buffer;
+                        buffer_size *= 2;
+                        continue;
+                    }
+
+					if (std::cin.gcount() == 0) {
+	                    delete[] buffer;
+	                    return nullptr;
+	                } 
+
+                    if (errMes != nullptr) {
+                        std::cout << errMes;
+                    } else {
+                        std::cout << "Invalid string, retry: ";
+                    }
+                }
+            } else {
+                success = true;
+            }
+        }
+
+        char* value = new char[std::strlen(buffer) + 1];
+        std::strcpy(value, buffer);
+        delete[] buffer;
+
+        return value;
+    }
+};

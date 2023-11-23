@@ -1,33 +1,33 @@
 /***********************************************************************
-// Final project Milestone 
-// Module: iProduct and Item
+// Final project Milestone 4
+// Module: Perishable Test
 // File: main.cpp
-// Version 1.0
+// Version 1.1
 // Author  Fardad Soleimanloo
 // Description
 //
 // Revision History
 // -----------------------------------------------------------
 // Name                 Date            Reason
+// fardad               23-11-4         Corrected the test to match
+//                                        correct_output.txt
 ***********************************************************************/
+
 #include <iostream>
 #include <fstream>
 #include "iProduct.h"
-#include "Item.h"
+#include "Perishable.h"
 using namespace std;
 using namespace sdds;
 void resetToOriginal();
 void entryAndSave();
-void descriptive();
-void linear();
+void fileAndRuleOf3();
+void display(Perishable P);
+void displayLinear(Perishable p);
 int main() {
    resetToOriginal();
    entryAndSave();
-   cout << "------------------------" << endl;
-   descriptive();
-   cout << "------------------------" << endl;
-   linear();
-   cout << "------------------------" << endl;
+   fileAndRuleOf3();
    return 0;
 }
 void resetToOriginal() {
@@ -38,22 +38,18 @@ void resetToOriginal() {
 }
 void entryAndSave() {
    ofstream file("data.dat", ios::app);
-   iProduct* p = new Item;
+   iProduct* p = new Perishable;
    cout << "Enter the following values: " << endl
-      << 
-      "abc\n"
-      "1111\n"
+      <<
+      "4444\n"
       "44444\n"
-      "Blanket\n"
-      "abc\n"
-      "222222\n"
+      "11111\n"
+      "Advil Extra Strength Caplets\n"
       "22\n"
-      "abc\n"
-      "222\n"
       "2\n"
-      "abc\n"
-      "22222222\n"
-      "22.22\n" << "------------------------" << endl;
+      "22.22\n"
+      "231212\n"
+      "<ENTER>\n"<< "------------------------" << endl;
    p->readSku(cin);
    cin >> *p;
    cout << "------------------------" << endl;
@@ -62,44 +58,53 @@ void entryAndSave() {
    p->linear(true);
    cout << *p << endl;
    p->save(file) << endl;
+   cout << "Enter the following values: " << endl
+      <<
+      "22222\n"
+      "Advil\n"
+      "33\n"
+      "3\n"
+      "33.33\n"
+      "231212\n"
+      "Keep in room temperature\n" << "------------------------" << endl;
+   p->readSku(cin);
+   cin >> *p ;
+   cout << "------------------------" << endl;
+   p->linear(false);
+   cout << *p << endl;
+   cout << "------------------------" << endl;
+   p->linear(true);
+   cout << *p << endl;
+   p->save(file) << endl;
    file.flush();
    file.close();
    delete p;
 }
-void descriptive() {
+
+void fileAndRuleOf3() {
    ifstream file("data.dat");
-   iProduct* p;
-   p = new Item;
-   while (p->load(file)) {
-      cout << *p << endl;
+   Perishable p;
+   Perishable last;
+   cout << "--------------------------------------------------------------------------------" << endl;
+   while (p.load(file)) {
+      displayLinear(last);
+      display(p);
+      last = p;
    }
-   delete p;
+   displayLinear(last);
 }
-void linear() {
-   ifstream file("data.dat");
-   iProduct* p;
-   p = new Item;
-	   while (p->load(file)) {
-      if (*p == 44444) {
-         p->linear(true);
-         (*p) += 10;
-         cout << "------------------------" << endl;
-         cout << *p << endl;
-         cout << "Need: " << p->qtyNeeded() << endl;
-         cout << "Have: " << p->qty() << endl;
-         cout.setf(ios::fixed);
-         cout.precision(2);
-         cout << "Price: " << double(*p) << endl;
-      }
-      if (*p == "kets") {
-         p->linear(true);
-         (*p) -= 5;
-         cout << "------------------------" << endl;
-         cout << *p << endl;
-         cout << "Need: " << p->qtyNeeded() << endl;
-         cout << "Have: " << p->qty() << endl;
-         cout << "This object is in a " << (bool(*p)?"good":"bad") << " state!" << endl;
-      }
+void display(Perishable p) {
+   if (p) {
+      cout << p
+         << "----------------------------------\nJust expiry date: "
+         << p.expiry() << endl;
    }
-   delete p;
+}
+void displayLinear(Perishable p) {
+   if (p) {
+      cout << "linear: ------------------------------------------------------------------------" << endl;
+      p.linear(true);
+      cout << p << endl;
+      cout << "--------------------------------------------------------------------------------" << endl;
+   }
 }

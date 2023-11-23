@@ -19,7 +19,7 @@ namespace sdds {
 	    else {
 	        m_description = nullptr;
 	        m_display_type = false;
-	        m_price = 0;
+	        m_price = 0;	
 	        m_quantity_available = 0;
 	        m_quantity_needed = 0;
 	        m_sku = 0;
@@ -58,6 +58,7 @@ namespace sdds {
 
 	Item::~Item() {
 		delete[] m_description;
+		m_description = nullptr;
 	}
 
 	int Item::qtyNeeded() const {
@@ -78,14 +79,14 @@ namespace sdds {
 
 	int Item::operator-=(int qty) {
 		if (qty > 0 && qty < m_quantity_available) 
-			return m_quantity_available - qty;
+			return m_quantity_available -= qty;
 		else 
 			return 0;
 	}
 
 	int Item::operator+=(int qty) {
 		if (qty > 0) 
-			return m_quantity_available + qty;
+			return m_quantity_available += qty;
 		else 
 			return 0;
 	}
@@ -131,98 +132,105 @@ namespace sdds {
 	}
 
 	std::ostream& Item::display(std::ostream& ostr) const {
-		ostr.clear();
+	    if (m_status) {
+	        if (m_display_type) {
+				ostr << std::setfill(' ');
+	            char small_desc[MAX_DESC_LENGTH + 1] = {};
+	            std::strncpy(small_desc, m_description, MAX_DESC_LENGTH);
 
-		if (m_status) {
-			const double purchase_fund = m_price * m_quantity_needed;
+	            ostr << std::left << std::setw(6) << m_sku << "| " << std::setw(35) << small_desc << " | " << std::right << std::setw(4) << m_quantity_available << " | " << std::setw(4) << m_quantity_needed << " |" << std::setw(8) << std::fixed << std::setprecision(2) << m_price << " | ";
+	        }
 
-			if (m_display_type) {
-				char small_desc[37];
-
-				for (int i = 0; i < 30; i++){
-					small_desc[i] = m_description[i];
-				}
-
-				ostr << m_sku << " | " << small_desc << " |" << m_quantity_available << " |" << m_quantity_needed << " |" << m_price;
-			} else {
-				ostr << "AMA Item:" << std::endl
-					 << m_sku << ": " << m_description << std::endl
-					 << "Quantity Needed: " << m_quantity_needed << std::endl
-					 << "Quantity Available: " << m_quantity_available << std::endl
-					 << "Needed Purchase Fund: $" << ostr.precision(4) << purchase_fund << std::endl;
-			}
-		} 
-		else ostr << m_status;
-
+		    else {
+	            ostr << std::left << "AMA Item:" << std::endl
+		    		 << m_sku << ": " << m_description << std::endl
+	                 << "Quantity Needed: " << m_quantity_needed << std::endl
+	                 << "Quantity Available: " << m_quantity_available << std::endl
+				     << "Unit Price: $" << m_price << std::endl
+	                 << "Needed Purchase Fund: $"
+	                 << std::fixed << std::setprecision(2) << m_price * (m_quantity_needed - m_quantity_available) << std::endl;
+	        }
+	    }
+		else {
+	        ostr << m_status;
+	    }
 		return ostr;
 	}
 
-	std::ifstream& Item::load(std::ifstream& ifstr) {
-	    char temp[MAX_LINEAR_DESCRIPTION_SIZE];
 
+	std::ifstream& Item::load(std::ifstream& ifstr) {
 	    delete[] m_description;
 	    m_description = nullptr;
 
-	    int sku, qtyAvailable, qtyNeeded;
+	    int sku, qty_available, qty_needed;
 	    double price;
 
+	    ifstr.clear();
+
 	    ifstr >> sku;
-
-	    ifstr.getline(temp, MAX_LINEAR_DESCRIPTION_SIZE, '\t');
-	    m_description = new char[strlen(temp) + 1];
-	    strcpy(const_cast<char*>(m_description), temp);
-
-	    ifstr >> qtyAvailable;
 	    ifstr.ignore(1000, '\t');
-	    ifstr >> qtyNeeded;
-	    ifstr.ignore(1000, '\t');
-	    ifstr >> price;
-	    ifstr.ignore();
 
-	    if (ifstr.fail()) {
+		char* temp = ut.get_cstring(ifstr, READ_ITEM_ERR_MSG, '\t');
+	    if (temp == nullptr || ifstr.fail()) {
 	        m_status = "Input file stream read failed!";
-	    } else {
-	        m_sku = sku;
-	        m_quantity_available = qtyAvailable;
-	        m_quantity_needed = qtyNeeded;
-	        m_price = price;
-			clear();
+	        delete[] temp;
+	        return ifstr;
 	    }
+
+	    ifstr >> qty_available;
+	    ifstr.ignore(1000, '\t');
+
+	    ifstr >> qty_needed;
+	    ifstr.ignore(1000, '\t');
+
+	    ifstr >> price;
+	    ifstr.ignore(1000, '\n');
+
+	    m_description = new char[std::strlen(temp) + 1];
+	    strcpy(const_cast<char*>(m_description), temp);
+	    delete[] temp;
+
+	    m_sku                = sku;
+	    m_quantity_available = qty_available;
+	    m_quantity_needed    = qty_needed;
+	    m_price              = price;
+	    clear();
 
 	    return ifstr;
 	}
 
+
 	std::istream& Item::read(std::istream& istr) {
 		clear();
 
-		std::cout << "AMA Item" << std::endl;
+		std::cout << "AMA Item:" << std::endl;
 		m_sku = readSku(istr);
 
 	    delete[] m_description;
 	    m_description = nullptr;
 
-	    char temp[MAX_LINEAR_DESCRIPTION_SIZE];
-
-	    std::cout << "Description: ";
 		istr.clear();
 		istr.ignore(1000, '\n');
-	    istr.getline(temp, MAX_LINEAR_DESCRIPTION_SIZE);
+		char* temp = ut.get_cstring("Description: ");
 
-	    m_description = new char[strlen(temp) + 1];
-
-	    if (m_description) {
-	        strncpy(const_cast<char*>(m_description), temp, MAX_LINEAR_DESCRIPTION_SIZE);
+	    if (temp != nullptr) {
+			m_description = new char[std::strlen(temp) + 1];
+			strcpy(const_cast<char*>(m_description), temp);
+			delete[] temp; 
 	    }
-
-		m_quantity_needed = ut.get_int(1, MAX_ITEMS_NEEDED, "Quantity Needed: ", READ_ITEM_ERR_MSG);
-		m_quantity_available = ut.get_int(0, m_quantity_needed, "Quantity On Hand: ", READ_ITEM_ERR_MSG);
-		m_price = ut.get_double(0, 9999.00, "Unit Price: $", READ_ITEM_ERR_MSG);
+		std::cout << "Quantity Needed: ";
+		m_quantity_needed = ut.get_int(1, MAX_ITEMS_NEEDED);
+		std::cout << "Quantity On Hand: ";
+		m_quantity_available = ut.get_int(0, m_quantity_needed);
+		std::cout << "Unit Price: $";
+		m_price = ut.get_double(0, 9999.00);
 
 		return istr;
 	}
 
 	int Item::readSku(std::istream& istr) {
-		return ut.get_int(40000, 99999, "SKU: ");
+		std::cout << "SKU: ";
+		return ut.get_int(40000, 99999);
 	}
 
 	std::ostream& operator<<(std::ostream& ostr, const Item& item) {

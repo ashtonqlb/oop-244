@@ -16,6 +16,8 @@
 
 #include "Item.h"
 
+constexpr auto INITIAL_BUFFER_SIZE = 360;
+
 namespace sdds {
    const int sdds_testYear = 2023;
    const int sdds_testMon = 12;
@@ -35,7 +37,8 @@ namespace sdds {
       double get_double(const char* prompt = "\0");
       double get_double(double min, double max, const char* prompt = nullptr, const char* errMes = nullptr);
 
-      char* get_cstring(const char* prompt = "\0", const char* errMes = nullptr, unsigned int len = MAX_LINEAR_DESCRIPTION_SIZE);
+   	  char* get_cstring(std::istream& input, const char* errMes = nullptr, char delimiter = '\n');
+      char* get_cstring(const char* prompt = "\0", const char* errMes = nullptr, char delimiter = '\n');
    };
    extern Utils ut;
 }

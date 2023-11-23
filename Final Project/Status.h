@@ -20,7 +20,7 @@ namespace sdds {
 
 		operator int() const { return m_code; }
 		operator const char* () const { return m_description; }
-		operator bool() const { return m_description == nullptr || m_description == "\0"; }
+		operator bool() const { return m_description == nullptr; }
 
 		friend std::ostream& operator<<(std::ostream& os, const Status& status);
 	};
