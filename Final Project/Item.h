@@ -14,14 +14,14 @@ constexpr auto MAX_DESC_LENGTH = 35;
 
 namespace sdds {
 	class Item : public iProduct {
-		const char* m_description;
-		bool m_display_type; // false = Linear | true = Descriptive
-		double m_price;
-		int m_quantity_available;
-		int m_quantity_needed;
+		const char* m_description = nullptr;
+		bool m_display_type = false;
+		double m_price = 0.00;
+		int m_quantity_available = 0;
+		int m_quantity_needed = 0;
 	protected:
 		Status m_status;
-		int m_sku;
+		int m_sku = 0;
 
 		bool linear() const { return m_display_type; };
 

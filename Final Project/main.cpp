@@ -26,7 +26,7 @@ void display(Perishable P);
 void displayLinear(Perishable p);
 int main() {
    resetToOriginal();
-   entryAndSave();
+   //entryAndSave();
    fileAndRuleOf3();
    return 0;
 }

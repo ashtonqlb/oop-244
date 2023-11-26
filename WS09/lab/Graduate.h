@@ -5,17 +5,21 @@
 
 namespace sdds {
 	class Graduate : public Student {
-		char* m_thesis_title;
-		char* m_supervisor_name;
+    char* thesisTitle;
+    char* supervisorName;
+
 	public:
-		Graduate() : Student(), m_thesis_title(nullptr), m_supervisor_name(nullptr) {}
-		Graduate(const char* name, int age, const char* title = nullptr, const char* supervisor = nullptr);
-		Graduate(const Graduate& other);
-		Graduate& operator=(const Graduate& other);
+	    Graduate() : Student(), thesisTitle(nullptr), supervisorName(nullptr) {}
+	    Graduate(const char* name, int age, const char* thesisTitle, const char* supervisorName);
+	    Graduate(const Graduate& other);
+	    Graduate& operator=(const Graduate& other);
 
-		 ~Graduate() override { delete[] m_thesis_title; delete[] m_supervisor_name; }
+		~Graduate() override {
+			delete[] thesisTitle;
+			delete[] supervisorName;
+		}
 
-		void display() const override;
+	    void display() const override;
 	};
 }
 

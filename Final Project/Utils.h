@@ -33,6 +33,7 @@ namespace sdds {
 
       int get_int(const char* prompt = "\0");
       int get_int(int min, int max, const char* prompt = nullptr, const char* errMes = nullptr);
+      int get_int(std::istream& file);
 
       double get_double(const char* prompt = "\0");
       double get_double(double min, double max, const char* prompt = nullptr, const char* errMes = nullptr);

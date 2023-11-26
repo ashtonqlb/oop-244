@@ -1,40 +1,41 @@
 #define _CRT_SECURE_NO_WARNINGS
 
-#include <iostream>
-#include <cstring>
+/***********************************************************************
+// OOP244 Workshop # 9: tester program
+//
+// File: main.cpp
+// Version 1.1
+// Date: 11/20/2022	
+// Author: Ashton Lunken
+// Description: This program demonstrates the concept of Polymorphism
+// No stealsies I swear. Following the Academic Integrity guidelines is my favourite hobby.
+// Student ID: 134128214
+*/
+
 #include "Student.h"
 
 namespace sdds {
-	Student::Student(const char * name, int age) {
+	Student::Student(const char* name, int age): age(age) {
+		this->name = new char[strlen(name) + 1];
+		strcpy(this->name, name);
 	}
 
-	Student::Student(const Student& other) {
-		if (other.m_name != nullptr) {
-            m_name = new char[strlen(other.m_name) + 1];
-            strcpy(m_name, other.m_name);
-        }
-		else {
-            m_name = nullptr;
-        }
-        m_name = other.m_name;
+	Student::Student(const Student& other): age(other.age) {
+		name = new char[strlen(other.name) + 1];
+		strcpy(name, other.name);
 	}
 
 	Student& Student::operator=(const Student& other) {
-	if (this != &other) {
-            delete[] m_name;
-            if (other.m_name != nullptr) {
-                m_name = new char[strlen(other.m_name) + 1];
-                strcpy(m_name, other.m_name);
-            }
-			else {
-                m_name = nullptr;
-            }
-            m_name = other.m_name;
-        }
-        return *this;
+		if (this != &other) {
+			delete[] name;
+			name = new char[strlen(other.name) + 1];
+			strcpy(name, other.name);
+			age = other.age;
+		}
+		return *this;
 	}
 
 	void Student::display() const {
-		std::cout << "Name: " << (m_name ? m_name : "N/A") << "\nAge: " << m_age << std::endl;
+		std::cout << "Name: " << name << "\nAge: " << age << std::endl;
 	}
 }

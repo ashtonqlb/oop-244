@@ -1,0 +1,10 @@
+
+[*]
+
+# ReSharper properties
+resharper_case_block_braces = end_of_line
+resharper_empty_block_style = together_same_line
+resharper_export_declaration_braces = end_of_line
+resharper_other_braces = end_of_line
+resharper_requires_expression_braces = end_of_line
+resharper_type_declaration_braces = end_of_line

@@ -4,7 +4,7 @@
 // File: main.cpp
 // Version 1.1
 // Date: 11/20/2022	
-// Author: Razi Iqbal	
+// Author: Ashton Bennet
 // Description: This program demonstrates the concept of Polymorphism 
 // using an example of Student and Graduate.
 //

@@ -11,6 +11,7 @@
 // Name                 Date            Reason
 ***********************************************************************/
 #define _CRT_SECURE_NO_WARNINGS
+
 #include <iostream>
 #include <ctime>
 #include <cstring>
@@ -100,6 +101,19 @@ namespace sdds {
 	        }
 	    }
 	    return value;
+	}
+
+	int Utils::get_int(std::istream& file) {
+	    int value;
+	    while (file >> value) {
+	        if (file.fail()) {
+	            file.clear();
+	            file.ignore(1000, '\n');
+	        } else {
+	            return value;
+	        }
+	    }
+	    return 0;
 	}
 
 	double Utils::get_double(const char* prompt) {

@@ -9,9 +9,13 @@
 #include "Item.h"
 #include "Perishable.h"
 
+#include "Utils.h"
+
 namespace sdds {
-	Perishable::Perishable(Perishable& other) : Item::Item( other) {
-		if(other.operator bool()) {
+	Perishable::Perishable(const Perishable& other) : Item((other)) {
+		m_handling_instructions = nullptr;
+		if(other.operator bool() && other.m_handling_instructions != nullptr) {
+			delete[] m_handling_instructions;
 			m_handling_instructions = new char[strlen(other.m_handling_instructions) + 1];
 			strcpy(const_cast<char*>(m_handling_instructions), other.m_handling_instructions);
 
@@ -27,29 +31,25 @@ namespace sdds {
 	}
 
 	Perishable& Perishable::operator=(const Perishable& other) {
-		if (this == &other) {
-	        return *this;
-	    }
-
-		if (other.operator bool()) {
-	        m_handling_instructions = new char[strlen(other.m_handling_instructions) + 1];
-	        strcpy(const_cast<char*>(m_handling_instructions), other.m_handling_instructions);
-
+	    if (this != &other) {
+	        Item::operator=(other);
+	        delete[] m_handling_instructions;
+	        if (other.operator bool() && other.m_handling_instructions != nullptr) {
+	            m_handling_instructions = new char[strlen(other.m_handling_instructions) + 1];
+	            strcpy(const_cast<char*>(m_handling_instructions), other.m_handling_instructions);
+	        } else {
+	            m_handling_instructions = nullptr;
+	        }
 	        m_expiry_date = other.m_expiry_date;
 	    }
-	    else {
-	        m_handling_instructions = nullptr;
-	    }
-		
-		return *this;
+	    return *this;
 	}
 
-	Perishable::operator bool() const { 
-		return Item::operator bool() && m_expiry_date && m_status;
+	Perishable::operator bool() const {
+		return m_expiry_date;
 	}
 
 	sdds::Perishable::~Perishable() {
-		Item::~Item();
 		delete[] m_handling_instructions;
 		m_handling_instructions = nullptr;
 	}
@@ -67,56 +67,82 @@ namespace sdds {
 			if (m_handling_instructions != nullptr){
 				ofstr << '\t' << m_handling_instructions;
 			}
-			 ofstr << "\t\t" << m_expiry_date;
+			else {
+				ofstr << "\t\t";
+			}
+
+			Date temp = m_expiry_date;
+			temp.formatted(false);
+
+			ofstr << "\t" << temp;
 		}
 
 		return ofstr;
 	}
 
 	std::ostream& Perishable::display(std::ostream& ostr) const {
-		Item::display(ostr);
+	    if (m_status) {
+	        if (linear()) {				
+					Item::display(ostr);
+					if (m_handling_instructions != nullptr && std::strlen(m_handling_instructions) > 0 && std::strcmp(m_handling_instructions, "\n") != 0) {
+						ostr << '*';
+					} else {
+						ostr << ' ';
+					}
 
-
-		if (m_status) {
-	        if (Item::linear()) {
-				ostr << std::setfill(' ');
-				ostr << m_expiry_date;
+					ostr << m_expiry_date;
 	        }
-		    else {
+	        else {
+	            std::cout << "Perishable ";
+	            Item::display(ostr);
 	            ostr << "Expiry date: " << m_expiry_date << std::endl;
-				if (m_handling_instructions != nullptr) {
-					ostr << "Handling Instructions: " << m_handling_instructions << std::endl;
-				}
+	            if (m_handling_instructions != nullptr && std::strlen(m_handling_instructions) > 0 && std::strcmp(m_handling_instructions, "\n") != 0) {
+	                ostr << "Handling Instructions: " << m_handling_instructions << std::endl;
+	            }
 	        }
 	    }
-		else {
+	    else {
 	        ostr << m_status;
 	    }
 
-		return ostr;
+	    return ostr;
 	}
 
 	std::ifstream& Perishable::load(std::ifstream& ifstr) {
-		Item::load(ifstr);
+	    Item::load(ifstr);
 
-		delete[] m_handling_instructions;
+	    ifstr.ignore(1000, '\t');
+
+	    int temp_date_value;
+
+	    delete[] m_handling_instructions;
 	    m_handling_instructions = nullptr;
 
-		const char* temp = ut.get_cstring(ifstr, READ_ITEM_ERR_MSG, '\t');
-		if (ifstr.fail()) {
+	    const char* temp = ut.get_cstring(ifstr, READ_ITEM_ERR_MSG, '\t');
+	    if (ifstr.fail()) {
 	        m_status = "Input file stream read failed!";
 	        delete[] temp;
+	        return ifstr;
 	    }
 
-		m_handling_instructions = new char[std::strlen(temp) + 1];
-	    strcpy(const_cast<char*>(m_handling_instructions), temp);
-	    delete[] temp;
-		clear();
+	    if (temp != nullptr) {
+	        m_handling_instructions = new char[std::strlen(temp) + 1];
+	        strcpy(const_cast<char*>(m_handling_instructions), temp);
+	        delete[] temp;
+	    } else {
+	        m_handling_instructions = nullptr;
+	    }
 
-		m_expiry_date.read(ifstr);
+	    clear();
 
-		return ifstr;
+	    ifstr >> temp_date_value;
+	    m_expiry_date = temp_date_value;
+
+	    ifstr.ignore(1000, '\n');
+
+	    return ifstr;
 	}
+
 
 	std::istream& Perishable::read(std::istream& istr) {
 		Item::read(istr);
@@ -124,12 +150,11 @@ namespace sdds {
 		delete[] m_handling_instructions;
 	    m_handling_instructions = nullptr;
 
-		std::cout << "Expiry Date (YYMMDD): ";
+		std::cout << "Expiry date (YYMMDD): ";
 		std::cin >> m_expiry_date;
 
 		if (istr.fail()) {
 			m_status = "Date read failed!";
-			m_expiry_date = 0;
 		}
 
 		std::cin.ignore(1000, '\n');

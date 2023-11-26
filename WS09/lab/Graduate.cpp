@@ -1,48 +1,37 @@
 #define _CRT_SECURE_NO_WARNINGS
 
-#include <iostream>
-#include <cstring>
 #include "Graduate.h"
 
 namespace sdds {
-	Graduate::Graduate(const char* name, int age, const char* title, const char* supervisor) : Student(name, age) {
-		m_thesis_title = new char[strlen(title) + 1];
-        strcpy(m_thesis_title, title);
-
-        m_supervisor_name = new char[strlen(supervisor) + 1];
-        strcpy(m_supervisor_name, supervisor);
-
-        delete[] title;
-        delete[] supervisor;
+	Graduate::Graduate(const char* name, int age, const char* thesisTitle, const char* supervisorName): Student(name, age) {
+		this->thesisTitle = new char[strlen(thesisTitle) + 1];
+		strcpy(this->thesisTitle, thesisTitle);
+		this->supervisorName = new char[strlen(supervisorName) + 1];
+		strcpy(this->supervisorName, supervisorName);
 	}
 
-	Graduate::Graduate(const Graduate& other) : Student(other) {
-        m_thesis_title = new char[strlen(other.m_thesis_title) + 1];
-        strcpy(m_thesis_title, other.m_thesis_title);
-
-        m_supervisor_name = new char[strlen(other.m_supervisor_name) + 1];
-        strcpy(m_supervisor_name, other.m_supervisor_name);
-    }
-
+	Graduate::Graduate(const Graduate& other): Student(other) {
+		thesisTitle = new char[strlen(other.thesisTitle) + 1];
+		strcpy(thesisTitle, other.thesisTitle);
+		supervisorName = new char[strlen(other.supervisorName) + 1];
+		strcpy(supervisorName, other.supervisorName);
+	}
 
 	Graduate& Graduate::operator=(const Graduate& other) {
-		 if (this != &other) {
-            Student::operator=(other);
-
-            delete[] m_thesis_title;
-            m_thesis_title = new char[strlen(other.m_thesis_title) + 1];
-            strcpy(m_thesis_title, other.m_thesis_title);
-
-            delete[] m_supervisor_name;
-            m_supervisor_name = new char[strlen(other.m_supervisor_name) + 1];
-            strcpy(m_supervisor_name, other.m_supervisor_name);
-        }
-        return *this;
+		if (this != &other) {
+			Student::operator=(other);
+			delete[] thesisTitle;
+			delete[] supervisorName;
+			thesisTitle = new char[strlen(other.thesisTitle) + 1];
+			strcpy(thesisTitle, other.thesisTitle);
+			supervisorName = new char[strlen(other.supervisorName) + 1];
+			strcpy(supervisorName, other.supervisorName);
+		}
+		return *this;
 	}
 
 	void Graduate::display() const {
-        Student::display();
-        std::cout << "Thesis Title: " << (m_thesis_title ? m_thesis_title : "N/A") 
-                  << "\nSupervisor: " << (m_supervisor_name ? m_supervisor_name : "N/A") << std::endl;
+		Student::display();
+		std::cout << "Thesis Title: " << thesisTitle << "\nSupervisor: " << supervisorName << std::endl << "---------------------------------------------" << std::endl;
 	}
 }

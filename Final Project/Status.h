@@ -5,10 +5,10 @@
 
 namespace sdds {
 	class Status {
-		char* m_description;
-		int m_code;
+		char* m_description = nullptr;
+		int m_code = 0;
 	public:
-		Status(const char* description = "\0", int code = 0);
+		Status(const char* description = nullptr, int code = 0);
 		Status(const Status& other);
 		~Status();
 
@@ -20,7 +20,7 @@ namespace sdds {
 
 		operator int() const { return m_code; }
 		operator const char* () const { return m_description; }
-		operator bool() const { return m_description == nullptr; }
+		operator bool() const { return m_description == nullptr ;}
 
 		friend std::ostream& operator<<(std::ostream& os, const Status& status);
 	};

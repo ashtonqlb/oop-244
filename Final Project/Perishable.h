@@ -1,10 +1,7 @@
 #ifndef SDDS_PERISHABLE_H
 #define SDDS_PERISHABLE_H
 
-
 #include <iostream>
-#include <fstream>
-#include <cstring>
 
 #include "Date.h"
 #include "Item.h"
@@ -12,10 +9,10 @@
 namespace sdds {
 	class Perishable : public Item {
 		Date m_expiry_date;
-		const char* m_handling_instructions;
+		const char* m_handling_instructions = nullptr;
 	public:
-		Perishable() : Item(), m_expiry_date(0, 0, 0), m_handling_instructions(nullptr){};
-		Perishable(Perishable& other);
+		Perishable() : m_expiry_date() {}
+		Perishable(const Perishable& other);
 
 		const Date& expiry ();
 
@@ -36,4 +33,4 @@ namespace sdds {
 	};
 }
 
-#endif SDDS_PERISHABLE_H
+#endif //SDDS_PERISHABLE_H

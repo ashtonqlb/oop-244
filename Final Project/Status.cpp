@@ -6,12 +6,19 @@
 
 namespace sdds {
 	Status::Status(const char* description, int code) : m_code(code) {
-		m_description = new char[strlen(description) + 1];
-		strcpy(m_description, description);
+		if (description) {
+			delete[] m_description;
+			m_description = new char[strlen(description) + 1];
+			strcpy(m_description, description);
+		}
+		else {
+			m_description = nullptr;
+		}
 	}
 
 	Status::Status(const Status& other) : m_code(other.m_code) {
 		if (other.m_description) {
+			delete[] m_description;
 			m_description = new char[strlen(other.m_description) + 1];
 			strcpy(m_description, other.m_description);
 		}

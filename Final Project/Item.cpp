@@ -5,8 +5,8 @@
 #include "Item.h"
 
 namespace sdds {
-	Item::Item(const Item& other) {
-		if (other.operator bool()) {
+		Item::Item(const Item& other) {
+		if (other.operator bool() && other.m_description != nullptr) {
 			m_description = new char[strlen(other.m_description) + 1];
 			strcpy(const_cast<char*>(m_description), other.m_description);
 
@@ -74,7 +74,7 @@ namespace sdds {
 	}
 
 	Item::operator bool() const {
-		return (m_description && m_quantity_available >= 0 && m_quantity_needed >= 0 && m_price > 0 && m_sku > 0);
+		return (m_description != nullptr && m_quantity_available > 0 && m_quantity_needed > 0 && m_price > 0 && m_sku > 0);
 	}
 
 	int Item::operator-=(int qty) {
@@ -132,13 +132,13 @@ namespace sdds {
 	}
 
 	std::ostream& Item::display(std::ostream& ostr) const {
-	    if (m_status) {
+	    if (m_status && m_description != nullptr) {
 	        if (m_display_type) {
 				ostr << std::setfill(' ');
 	            char small_desc[MAX_DESC_LENGTH + 1] = {};
 	            std::strncpy(small_desc, m_description, MAX_DESC_LENGTH);
 
-	            ostr << std::left << std::setw(6) << m_sku << "| " << std::setw(35) << small_desc << " | " << std::right << std::setw(4) << m_quantity_available << " | " << std::setw(4) << m_quantity_needed << " |" << std::setw(8) << std::fixed << std::setprecision(2) << m_price << " | ";
+	            ostr << std::left << std::setw(6) << m_sku << "| " << std::setw(35) << small_desc << " | " << std::right << std::setw(4) << m_quantity_available << " | " << std::setw(4) << m_quantity_needed << " |" << std::setw(8) << std::fixed << std::setprecision(2) << m_price << " |";
 	        }
 
 		    else {
@@ -170,7 +170,7 @@ namespace sdds {
 	    ifstr >> sku;
 	    ifstr.ignore(1000, '\t');
 
-		char* temp = ut.get_cstring(ifstr, READ_ITEM_ERR_MSG, '\t');
+		const char* temp = ut.get_cstring(ifstr, READ_ITEM_ERR_MSG, '\t');
 	    if (temp == nullptr || ifstr.fail()) {
 	        m_status = "Input file stream read failed!";
 	        delete[] temp;
@@ -183,8 +183,7 @@ namespace sdds {
 	    ifstr >> qty_needed;
 	    ifstr.ignore(1000, '\t');
 
-	    ifstr >> price;
-	    ifstr.ignore(1000, '\n');
+		ifstr >> price;
 
 	    m_description = new char[std::strlen(temp) + 1];
 	    strcpy(const_cast<char*>(m_description), temp);
