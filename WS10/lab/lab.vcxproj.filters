@@ -32,7 +32,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="selection.h">
+    <ClInclude Include="Selection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Car.h">

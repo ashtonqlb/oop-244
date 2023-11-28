@@ -25,7 +25,5 @@ namespace sdds {
       std::ostream& display(std::ostream& os)const;
       bool operator==(int office)const;
    };
-
-
 }
 #endif // !SDDS_EMPLOYEE_H_

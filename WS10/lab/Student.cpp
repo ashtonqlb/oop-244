@@ -15,7 +15,6 @@
 #include <iostream>
 #include <iomanip>
 #include <cstring>
-using namespace std;
 
 using namespace std;
 #include "Student.h"

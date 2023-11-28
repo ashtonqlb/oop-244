@@ -148,7 +148,7 @@
   <ItemGroup>
     <ClInclude Include="Car.h" />
     <ClInclude Include="EmployeeOffice.h" />
-    <ClInclude Include="selection.h" />
+    <ClInclude Include="Selection.h" />
     <ClInclude Include="Displayable.h" />
     <ClInclude Include="Student.h" />
   </ItemGroup>
