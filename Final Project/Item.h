@@ -39,12 +39,17 @@ namespace sdds {
 		int operator+=(int qty) override;
 		void linear(bool display_type) override;
 
+		const char* description() override;
+		const char* handling_instructions() override;
+		int sku() override;
+		const Date& expiry() override;
+
 		void clear();
 
 		bool operator==(int sku) const override;
 		bool operator==(const char* description) const override;
 
-		std::ofstream& save(std::ofstream& ofstr) const override;
+		std::ofstream& save(std::ofstream& ofstr) override;
 		std::ostream& display(std::ostream& ostr) const override;
 		std::ifstream& load(std::ifstream& ifstr) override;
 		std::istream& read(std::istream& istr) override;

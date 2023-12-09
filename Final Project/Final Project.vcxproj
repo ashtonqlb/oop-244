@@ -147,7 +147,12 @@
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="correct_output.txt" />
+    <Text Include="correct_output51.txt" />
+    <Text Include="correct_output52.txt" />
+    <Text Include="correct_output53.txt" />
+    <Text Include="correct_output54.txt" />
+    <Text Include="correct_output55.txt" />
+    <Text Include="correct_output56.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

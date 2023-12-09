@@ -78,21 +78,39 @@ namespace sdds {
 	}
 
 	int Item::operator-=(int qty) {
-		if (qty > 0 && qty < m_quantity_available) 
-			return m_quantity_available -= qty;
-		else 
-			return 0;
+    if (qty > 0 && qty <= m_quantity_available) {
+        m_quantity_available -= qty;
+    }
+    return m_quantity_available; // You can still return the updated quantity, but it's not necessary.
 	}
 
 	int Item::operator+=(int qty) {
-		if (qty > 0) 
-			return m_quantity_available += qty;
-		else 
-			return 0;
+	    if (qty > 0) {
+	        m_quantity_available += qty;
+	    }
+	    return m_quantity_available; // You can still return the updated quantity, but it's not necessary.
 	}
+
 
 	void Item::linear(bool display_type) {
 		m_display_type = display_type;
+	}
+
+	const char* Item::description() {
+		return m_description;	
+	}
+
+	const char* Item::handling_instructions() {
+		return nullptr;	
+	}
+
+	int Item::sku() {
+		return m_sku;	
+	}
+
+	const Date& Item::expiry(){
+		static Date tempDate(0, 0, 0);
+		return tempDate;
 	}
 
 	void Item::clear() {
@@ -102,7 +120,7 @@ namespace sdds {
 	bool Item::operator==(int sku) const {
 		return m_sku == sku;
 	}
-
+	
 	bool Item::operator==(const char* description) const {
 		int M = strlen(description);
 		int N = strlen(m_description);
@@ -119,13 +137,14 @@ namespace sdds {
 		}
 
 		return false;
-	}	
+	}
 
-	std::ofstream& Item::save(std::ofstream& ofstr) const {
+	std::ofstream& Item::save(std::ofstream& ofstr) {
 		if (operator bool()) {
 			ofstr << m_sku << '\t' << m_description << '\t' << m_quantity_available << '\t' << m_quantity_needed  << '\t';
 			ofstr.precision(4);
 			ofstr << m_price;
+			ofstr << std::endl;
 		}
 
 		return ofstr;

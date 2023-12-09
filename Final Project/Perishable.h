@@ -9,12 +9,13 @@
 namespace sdds {
 	class Perishable : public Item {
 		Date m_expiry_date;
-		const char* m_handling_instructions = nullptr;
+		char* m_handling_instructions = nullptr;
 	public:
 		Perishable() : m_expiry_date() {}
 		Perishable(const Perishable& other);
 
-		const Date& expiry ();
+		const Date& expiry() override;
+		const char* handling_instructions() override;
 
 		Perishable& operator=(const Perishable& other);
 		operator bool() const override;
@@ -23,7 +24,7 @@ namespace sdds {
 
 		int readSku(std::istream& istr) override;
 
-		std::ofstream& save(std::ofstream& ofstr) const override;
+		std::ofstream& save(std::ofstream& ofstr) override;
 		std::ostream& display(std::ostream& ostr) const override;
 		std::ifstream& load(std::ifstream& ifstr) override;
 		std::istream& read(std::istream& istr) override;

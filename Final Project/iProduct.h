@@ -4,6 +4,8 @@
 #include <iostream>
 #include <fstream>
 
+#include "Date.h"
+
 namespace sdds {
 	class iProduct {
 	public:
@@ -20,15 +22,21 @@ namespace sdds {
 
         virtual void linear(bool display_type) = 0;
 
-        virtual std::ofstream& save(std::ofstream& ofstr) const = 0;
+        virtual std::ofstream& save(std::ofstream& ofstr) = 0;
         virtual std::ostream& display(std::ostream& ostr) const = 0;
         virtual std::ifstream& load(std::ifstream& ifstr) = 0;
         virtual std::istream& read(std::istream& istr) = 0;
       
         virtual ~iProduct() {}
 
-        friend std::ostream& operator<<(std::ostream& ostr, const iProduct& product) { return product.display(ostr); };
-        friend std::istream& operator>>(std::istream& istr, iProduct& product) { return product.read(istr); };
+        virtual const char* description() = 0;
+        virtual const char* handling_instructions() = 0;
+
+        virtual int sku() = 0;
+        virtual const Date& expiry() = 0;
+
+        friend std::ostream& operator<<(std::ostream& ostr, const iProduct& product) { return product.display(ostr); }
+        friend std::istream& operator>>(std::istream& istr, iProduct& product) { return product.read(istr); }
 	};
 }
 

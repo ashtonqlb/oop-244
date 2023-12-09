@@ -15,7 +15,7 @@ namespace sdds {
 
 	template <typename arrayType>
 	void csvDisplaySelection(const char* title, const arrayType array[], const int* indices) {
-	    std::cout << title;
+	    std::cout << title << std::endl;
 	    if (indices == nullptr || indices[0] == -1) {
 	        std::cout << "Empty Selection" << std::endl;
 	        return;

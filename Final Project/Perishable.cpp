@@ -30,6 +30,14 @@ namespace sdds {
 		return m_expiry_date;
 	}
 
+	const char* Perishable::handling_instructions() {
+		if (strcmp(m_handling_instructions, "\0") != 0) {
+			return m_handling_instructions;
+		}
+
+		return nullptr;
+	}
+
 	Perishable& Perishable::operator=(const Perishable& other) {
 	    if (this != &other) {
 	        Item::operator=(other);
@@ -59,22 +67,27 @@ namespace sdds {
 		return ut.get_int(10000 , 39999);
 	}
 
-	std::ofstream& Perishable::save(std::ofstream& ofstr) const {
-		ofstr << '\n';
-		Item::save(ofstr);
+	std::ofstream& Perishable::save(std::ofstream& ofstr) {
+		const char* tempDesc = description();
+		ofstr << m_sku << '\t' << tempDesc << '\t' << qty() << '\t' << qtyNeeded() << '\t';
+		ofstr.precision(4);
+		ofstr << operator double() << '\t';
 
 		if (operator bool()) {
-			if (m_handling_instructions != nullptr){
-				ofstr << '\t' << m_handling_instructions;
-			}
-			else {
-				ofstr << "\t\t";
+			if (m_handling_instructions != nullptr && strcmp(m_handling_instructions, "\0") != 0){
+				const size_t len = strlen(m_handling_instructions);
+
+				if (len > 0 && m_handling_instructions[len - 1] == '\n') {
+					m_handling_instructions[len - 1] = '\0';
+				}
+
+				ofstr << m_handling_instructions;
 			}
 
 			Date temp = m_expiry_date;
 			temp.formatted(false);
 
-			ofstr << "\t" << temp;
+			ofstr << "\t" << temp << std::endl;
 		}
 
 		return ofstr;
@@ -161,13 +174,20 @@ namespace sdds {
 
 		std::cout << "Handling Instructions, ENTER to skip: ";
 		const char* temp = ut.get_cstring("", READ_ITEM_ERR_MSG, '\n');
+
 		if (istr.fail()) {
 	        m_status = "Input file stream read failed!";
 	        delete[] temp;
 	    }
 
-		m_handling_instructions = new char[std::strlen(temp) + 1];
-	    strcpy(const_cast<char*>(m_handling_instructions), temp);
+	    if (temp[0] == '\n') { // Check if temp is just a newline character
+			delete[] m_handling_instructions;
+	        m_handling_instructions = nullptr;
+	    } else {
+	        m_handling_instructions = new char[std::strlen(temp) + 1];
+	        strcpy(const_cast<char*>(m_handling_instructions), temp);
+	    }
+
 	    delete[] temp;
 		clear();
 

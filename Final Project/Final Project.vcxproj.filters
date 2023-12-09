@@ -67,7 +67,22 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="correct_output.txt">
+    <Text Include="correct_output51.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="correct_output52.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="correct_output53.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="correct_output54.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="correct_output55.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="correct_output56.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

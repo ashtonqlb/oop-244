@@ -14,7 +14,7 @@
 #ifndef SDDS_UTILS_H
 #define SDDS_UTILS_H
 
-#include "Item.h"
+#include "iProduct.h"
 
 constexpr auto INITIAL_BUFFER_SIZE = 360;
 
